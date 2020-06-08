@@ -7,7 +7,6 @@ module.exports = app => {
     real_name: STRING,
     unionid: STRING,
     section_key: STRING,
-    content: STRING,
     phone: STRING,
     avatar_url: STRING,
     sex: INTEGER,

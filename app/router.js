@@ -114,6 +114,7 @@ module.exports = app => {
   router.delete("/advertise/material/:id",jwt, controller.advertuseMaterial.delete);
   router.post('/advertise/material/sort',jwt, controller.advertuseMaterial.sort);
 
-  router.post("/api/user",controller.users.login);
-  router.post("/aliyun-sms", controller.aliyun.sendCode);
+  router.post("/api/sms/login",controller.users.login);
+  router.post("/api/sms/send", controller.aliyun.sendCode);
+  router.post("/api/wachat",controller.wechat.wechat);
 };
