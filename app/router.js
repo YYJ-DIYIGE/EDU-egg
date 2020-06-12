@@ -114,7 +114,15 @@ module.exports = app => {
   router.delete("/advertise/material/:id",jwt, controller.advertuseMaterial.delete);
   router.post('/advertise/material/sort',jwt, controller.advertuseMaterial.sort);
 
-  router.post("/api/sms/login",controller.users.login);
-  router.post("/api/sms/send", controller.aliyun.sendCode);
-  router.post("/api/wachat",controller.wechat.wechat);
+  router.post("/sms/login",controller.users.login);
+  router.post("/sms/send", controller.aliyun.sendCode);
+  router.post("/wachat",controller.wechat.wechat);
+  router.put("/user/:id", controller.users.update);
+  router.put("/user/bind/:id",controller.users.bind);
+  router.delete("/user/bind/:id", controller.users.unbound);
+  router.put("/wachat/bind/:id", controller.wechat.bind);
+  router.delete("/wachat/bind/:id", controller.wechat.unbound);
+  router.delete("/user/:id",controller.wechat.delete);
+
+  router.get("/index/advertise", controller.advertise.Allshow);
 };

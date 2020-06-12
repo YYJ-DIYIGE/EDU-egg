@@ -58,6 +58,73 @@ class UsersContorller extends Controller {
       ctx.body = {code:0,message:"服务器错误"}
     }
   }
+
+  async update(){
+    const {ctx} = this;
+    try{
+      const data = ctx.request.body;
+      const id = ctx.params.id;
+      const user = await ctx.model.Users.findByPk(id);
+      if (!user) {
+        ctx.body = ({
+          code:404,
+          message:"找不到该条数据"
+        });
+        return;
+      }
+      const users = await user.update(data);
+      const userinfo = users._previousDataValues;
+      console.log(userinfo)
+      ctx.body = {code:200,userinfo}
+    }catch(err){
+      ctx.body = {code:0,message:"服务器错误"}
+    }
+  }
+
+  async bind(){
+    const ctx = this.ctx;
+    try{
+      const phone = ctx.request.body.phone;
+      const code = ctx.request.body.code;
+      const id = ctx.params.id;
+      const smsCode = await ctx.model.Sms.findAll({
+        where:{
+          phone,
+          code
+        },
+        raw: true
+      })
+      if(smsCode.length == 0){
+        ctx.body = {code:0,message:"验证码过期"}
+        return
+      }
+      await ctx.model.Users.destroy({where:{phone}})
+      await ctx.model.Users.update({phone:phone},{where:{id:id}})
+      const users = await ctx.model.Users.findAll({
+        where:{id},
+        raw: true
+      })
+      const userinfo = users[0];
+       ctx.body = {code:200,userinfo}
+    }catch(err){
+      ctx.body = {code:0,message:"服务器错误!"}
+    }
+  }
+  async unbound(){
+    const ctx = this.ctx;
+    try{
+      const id = ctx.params.id;
+      await ctx.model.Users.update({phone:null},{where:{id:id}})
+      const users = await ctx.model.Users.findAll({
+        where:{id},
+        raw: true
+      })
+      const userinfo = users[0];
+      ctx.body = {code:200,userinfo}
+    }catch(err){
+      ctx.body = {code:0,message:"服务器错误!"}
+    }
+  }
 }
 
 module.exports = UsersContorller;

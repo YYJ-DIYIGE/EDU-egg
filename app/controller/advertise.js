@@ -11,7 +11,39 @@ class ProjectsController extends Controller {
     }
     
   }
-
+  async Allshow(){
+    const ctx = this.ctx;
+    try{
+      const advertise = await ctx.model.Advertise.findAll({raw:true});
+      const AdvertuseMaterial = await Promise.all(advertise.map(async (data,index)=>{
+       return await ctx.model.AdvertuseMaterial.findAll({
+          where:{advertise_id:data.id},
+          raw:true
+        })
+      }))
+      const Material =  await ctx.model.Material.findAll({raw:true});
+      advertise.forEach((item,index)=>{
+        item.material = []
+        AdvertuseMaterial[index].forEach(data =>{
+          if(item.id == data.advertise_id){
+            let material_id = data.material_id
+            Material.forEach((data) =>{
+              if(data.id == material_id){
+                item.material.push({
+                  image_url:data.image_url,
+                  link:data.link,
+                  window:data.window
+                })
+              }
+            })
+          }
+        })
+      })
+      ctx.body = advertise
+    }catch(err){
+      console.log(err)
+    }
+  }
   async create() {
     const ctx = this.ctx;
    try{
