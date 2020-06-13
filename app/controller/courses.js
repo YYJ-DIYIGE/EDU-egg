@@ -9,8 +9,23 @@ class ProjectsController extends Controller {
     }catch(e){
       console.log(e)
     }
-    
   }
+  async latest() {
+    try{
+      const ctx = this.ctx;
+      const course = await ctx.model.Courses.findAll({
+        raw:true,
+        order: [
+            ['created_time', 'DESC']
+        ],
+        limit: 4
+      })
+      console.log(course)
+      ctx.body = course
+    }catch(err){
+      console.log(err)
+    }
+  } 
 
   async create() {
     const ctx = this.ctx;

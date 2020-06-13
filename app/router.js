@@ -125,4 +125,5 @@ module.exports = app => {
   router.delete("/user/:id",controller.wechat.delete);
 
   router.get("/index/advertise", controller.advertise.Allshow);
+  router.get("/index/course", controller.courses.latest);
 };
