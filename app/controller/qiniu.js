@@ -9,13 +9,13 @@ class qiniuController extends Controller {
       const secretKey = app.config.qiniu.secretKey;
       const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
       const options ={
-        scope: "qinuyyj"
+        scope: "yyjxaingni"
       }
       const putPolicy = new qiniu.rs.PutPolicy(options);
       const uploadToken= putPolicy.uploadToken(mac);
       ctx.body = {
         token: uploadToken,
-        domain: "qa86u62w8.bkt.clouddn.com"
+        domain: "qbzx7385k.bkt.clouddn.com"
       }
     }catch(e){
       console.log(e)

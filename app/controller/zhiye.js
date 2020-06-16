@@ -1,3 +1,5 @@
+const zhiyePath = require('../model/zhiye-path');
+
 const Controller = require('egg').Controller;
 
 
@@ -9,9 +11,35 @@ class ProjectsController extends Controller {
     }catch(e){
       console.log(e)
     }
-    
   }
-
+  async Allshow() {
+    const ctx = this.ctx;
+    try{
+      const zhiye = await ctx.model.Zhiye.findAll({
+        raw:true,
+        order: [
+          ['created_time', 'DESC']
+        ]
+      })
+      const zhiyepath = await Promise.all(zhiye.map(async (data)=>{
+        return await ctx.model.ZhiyePath.findAll({
+           where:{zhiye_id:data.id},
+           raw:true
+         })
+       }))
+       zhiye.forEach((item,index) => {
+        zhiyepath[index].map(data =>{
+           if(data.zhiye_id === item.id){
+            item.active = true;
+           }
+         })
+       })
+       console.log(zhiye,999)
+      ctx.body = zhiye
+    }catch(e){
+      console.log(e)
+    }
+  }
   async create() {
     const ctx = this.ctx;
    try{

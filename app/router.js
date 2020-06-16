@@ -126,4 +126,5 @@ module.exports = app => {
 
   router.get("/index/advertise", controller.advertise.Allshow);
   router.get("/index/course", controller.courses.latest);
+  router.get("/zhiyeShow", controller.zhiye.Allshow);
 };
