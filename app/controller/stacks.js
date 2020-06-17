@@ -5,7 +5,25 @@ class StacksController extends Controller {
   async index() {
     try{
       const ctx = this.ctx;
-      ctx.body = await ctx.model.Stacks.findAll()
+      const page = ctx.query.page;
+      const row = ctx.query.row;
+      if(page,row){
+        const stackes = await ctx.model.Stacks.findAll({
+          raw:true
+        })
+        const total = stackes.length;
+        const stacks = await ctx.model.Stacks.findAll({
+          limit: parseInt(row),
+          offset:(page - 1)* row,
+          raw:true
+        })
+        ctx.body = {code:200, stacks,total}
+      }else{
+        const stacks = await ctx.model.Stacks.findAll({
+          raw:true
+        })
+        ctx.body = {code:200, stacks}
+      }
     }catch(e){
       console.log(e)
     }

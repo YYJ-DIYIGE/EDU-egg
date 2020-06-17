@@ -5,19 +5,26 @@ class SubjectController extends Controller {
   async index() {
     const ctx = this.ctx;
     try{
+      const page = ctx.query.page;
+      const row = ctx.query.row;
       const Subject =  await ctx.model.Subject.findAll({
         raw:true
       })
-      const stacks_id = Subject.map(data => data.stack_id);
+      const total = Subject.length;
+      const SubjectPage = await ctx.model.Subject.findAll({
+        limit: parseInt(row),
+        offset:(page - 1)* row,
+        raw:true
+      })
+      const stacks_id = SubjectPage.map(data => data.stack_id);
       const stacks = await Promise.all(stacks_id.map(async(data)=>{
         return await ctx.model.Stacks.findAll({
           where:{id:data},
           raw:true
         })
       }))
-     
       const Subjectes = []
-      Subject.forEach((data,index)=>{
+      SubjectPage.forEach((data,index)=>{
         data.stacks = ''
         Subjectes[index] = data
         stacks[index].forEach(data =>{
@@ -26,7 +33,7 @@ class SubjectController extends Controller {
           }
         })
       })
-      ctx.body = {code:200,Subjectes}
+      ctx.body = {code:200,SubjectPage,total}
     }catch(e){
       console.log(e)
     }

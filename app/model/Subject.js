@@ -7,7 +7,7 @@ module.exports = app => {
     stack_id:INTEGER,
     level:INTEGER,
     option:TEXT,
-    currect:TEXT,
+    currect:INTEGER,
     created_time:DATE,
     updated_time: DATE,
   },

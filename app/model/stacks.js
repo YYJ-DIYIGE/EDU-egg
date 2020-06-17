@@ -5,7 +5,7 @@ module.exports = app => {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     name: STRING,
     slug:STRING,
-    tag_line:STRING,
+    status:INTEGER,
     description:STRING,
     image_url:STRING,
     created_time:DATE,
