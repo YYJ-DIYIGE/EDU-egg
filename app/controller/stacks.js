@@ -27,9 +27,19 @@ class StacksController extends Controller {
     }catch(e){
       console.log(e)
     }
-    
   }
-
+  async skill (){
+    const ctx = this.ctx;
+    try{
+      const stacks = await ctx.model.Stacks.findAll({
+        where:{status:1},
+        raw:true
+      })
+      ctx.body = {code:200, stacks}
+    }catch(err){
+      console.log(err)
+    }
+  }
   async create() {
     const ctx = this.ctx;
    try{

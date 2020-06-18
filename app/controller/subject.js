@@ -37,9 +37,24 @@ class SubjectController extends Controller {
     }catch(e){
       console.log(e)
     }
-    
   }
-
+  async subject(){
+    const ctx = this.ctx;
+    try{
+      const id = ctx.params.id;
+      const skill = await ctx.model.Stacks.findByPk(id);
+      const subject = await ctx.model.Subject.findAll({
+        where:{stack_id:id},
+        limit:20
+      })
+      subject.forEach(data =>{
+        data.option = JSON.parse(data.option)
+      })
+      ctx.body = {code:200,skill,subject}
+    }catch(err){
+      console.log(err)
+    }
+  }
   async create() {
     const ctx = this.ctx;
    try{
@@ -55,14 +70,12 @@ class SubjectController extends Controller {
     const ctx = this.ctx;
     try{
       const id = ctx.params.id;
-      console.log(id,111)
       const SubjectEdit = await ctx.model.Subject.findAll({
         where:{id},
         raw:true
       });
       SubjectEdit[0].option = JSON.parse(SubjectEdit[0].option)
       const Subject = SubjectEdit[0]
-      console.log(Subject,999)
       ctx.body = { code: 200, Subject};
     }catch(err){
       ctx.body = { code: 0, message: err};
